@@ -1,30 +1,28 @@
-### 项目的代码结构
+### Project code structure
 
-[只需要看 new code 目录下即可, 其他的是老版本的代码]
-
-为了项目更好的写和运行以及减少代码的冗余, 项目结构主要分成几个部分.
+In order to write and run the project better and reduce code redundancy, the project structure is mainly divided into the following several parts.
 
 ```
 new-code
---- Algorithm 一些新的算法直接写到里面即可, 负责给一个网络之后, 找到 H 中的一个 fault-free 的点
---- experiment_result 记录实验结果
---- network 一些新的论文需要形成新的网络, 这里重写一下网络即可
---- Node 网络中节点的组成, 一般不需要改
---- paper_start 不同论文的实验构成 = 一个新的 main(内含生成网络的参数) + 导入 network 中的某个网络 + Algorithm 中的某个算法 + 网络结果诊断和判断
---- utils 放一些小工具比如指标计算等等函数
+--- Algorithm: Some new algorithms' modules can be written directly into it, which is responsible for finding a fault-free vertex in H after generating a network.
+--- experiment_result: file folder to record experimental results
+--- network: file folder in which modules of network are
+--- Node: the composition of nodes in the network
+--- paper_start: the main file which integrates the modules of algorithm, network and node and we officially start our simulation and set the parameters here.
+--- utils: file folder in which we put some small tools such as indicator calculation and other functions
 ```
 
-> 在 paper_start 文件夹中, 一个 main 的逻辑是:
+> In the paper_start folder, the logic of a main file is:
 >
-> 1. 设置相关生成网络的参数, 包括
+> 1. Set parameters related to the generated network, including:
 >
-> - 循环次数
-> - 网络一些参数, g-goodn 等, 各个点的度
+> - number of loops
+> - Some parameters of the network, the value of g for g-good-neighbor property, the degree of each vertex, etc
 >
-> 2. 这些参数的组合会放在一个参数 list 中供代码解析, 每一组参数, 如 [循环次数, An节点数量 xxxx, ...]中
-> 3. 导入 Network, 通过这组参数初始化网络, 获得变量 network
-> 4. 将 network 传递给要进行诊断的算法 Algorithm, 进行诊断, 诊断的结果是返回一个好的 H
-> 5. 打印相关参数和数据
-> 6. 找到一个好的 H 之后, 调用 utils中的PMC 算法进行快速诊断
-> 7. 打印相关参数和数据
-> 8. 当 PMC 找不到新的 H 且整个网络并没有诊断完, 第二次调用 算法 Algorithm, 进行诊断, 并继续 PMC 过程, 直到所有网络诊断完毕
+> 2. The combination of these parameters will be placed in a parameter list for code analysis. Each group of parameters, such as [number of loops, number of An nodes, ...]
+> 3. Import network module, initialize the network through this set of parameters, and obtain the variable network
+> 4. Pass network to the algorithm Algorithm to be diagnosed, perform diagnosis, and the result of diagnosis is to return a faultless H vertex
+> 5. Print relevant parameters and data
+> 6. After finding a faultless H vertex, call the PMC algorithm in utils for quick diagnosis
+> 7. Print relevant parameters and data
+> 8. When PMC model cannot find the any new H faultless vertex and the entire subnetwork H has not been diagnosed, the algorithm is called for the second time to perform diagnosis, and the PMC process continues until all accessible vertices in H are diagnosed.
